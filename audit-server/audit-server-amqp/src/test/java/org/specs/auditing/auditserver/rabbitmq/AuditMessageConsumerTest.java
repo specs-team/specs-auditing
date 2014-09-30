@@ -4,14 +4,11 @@ import org.apache.log4j.Logger;
 import org.specs.auditing.auditserver.rabbitmq.utils.Conf;
 import org.specs.auditing.client.Auditor;
 import org.specs.auditing.client.AuditorFactory;
-import org.specs.auditing.common.AuditEvent;
-import org.specs.auditing.common.cadf.*;
-import org.specs.auditing.common.cadf.ext.Initiator;
+import org.specs.auditing.common.auditevent.AuditEvent;
+import org.specs.auditing.common.auditevent.Severity;
+import org.specs.auditing.common.auditevent.Target;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 public class AuditMessageConsumerTest {
     private static final String CONF_FILE = "src/test/resources/test.properties";
@@ -44,33 +41,19 @@ public class AuditMessageConsumerTest {
         auditMessageConsumer.close();
     }
 
-    private CADFEventRecord createAuditEvent() {
-        CADFEventRecord event = new CADFEventRecord();
-        event.setId(UUID.randomUUID().toString());
-        event.setEventType(EventType.ACTIVITY);
-        event.setEventTime(new Date());
-        event.setAction("create");
-        event.setOutcome(Outcome.SUCCESS);
+    private AuditEvent createAuditEvent() {
+        AuditEvent auditEvent = new AuditEvent();
+        auditEvent.setAction("READ");
+        auditEvent.setEventTime(new Date());
+        auditEvent.setEventType("REST_API_CALL");
+        org.specs.auditing.common.auditevent.Initiator initiator = new org.specs.auditing.common.auditevent.Initiator("test_user");
+        initiator.setType("USER");
+        auditEvent.setInitiator(initiator);
+        Target target = new Target("specs-server1/federation-api");
+        target.setType("WEB_SERVICE");
+        auditEvent.setSeverity(Severity.INFO);
+        auditEvent.setOutcome(org.specs.auditing.common.auditevent.Outcome.SUCCESS);
 
-        Initiator initiator = new Initiator();
-        initiator.setId("contrail-federation-cli");
-        initiator.setOauthAccessToken("f74a6db9-9afb-4788-ae66-93bb768b777e");
-        event.setInitiator(initiator);
-
-        Resource target = new Resource();
-        target.setId("contrail-federation-api");
-        List<Attachment> attachments = new ArrayList<Attachment>();
-        Attachment requestData = new Attachment();
-        attachments.add(requestData);
-        requestData.setContentType("application-json");
-        requestData.setContent("{\"method\":\"POST\",\"uri\":\"http://contrail.xlab.si:8080/federation-api/providers/b9d3e839-347e-4382-ba30-5cda312ad55f/servers\",\"content\":{\"name\":\"server001.myprovider.com\"}}");
-        target.setAttachments(attachments);
-        Geolocation geolocation = new Geolocation();
-        geolocation.setRegionICANN("si");
-        geolocation.setCity("Ljubljana");
-        target.setGeolocation(geolocation);
-        event.setTarget(target);
-
-        return event;
+        return auditEvent;
     }
 }

@@ -25,7 +25,11 @@ public class AmqpAuditor implements Auditor {
     private Channel channel;
     private String exchangeName;
 
-    public AmqpAuditor(Properties props) throws IOException {
+    public AmqpAuditor() {
+        log.debug("AmqpAuditor created.");
+    }
+
+    public void init(Properties props) throws IOException {
         Conf.load(props);
 
         this.exchangeName = Conf.getExchangeName();

@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.Properties;
+import java.util.ServiceLoader;
 
 public class AuditorFactory {
     private static Logger log = Logger.getLogger(AuditorFactory.class);
@@ -15,6 +15,10 @@ public class AuditorFactory {
     }
 
     public static void init(String confFilePath) throws Exception {
+        if (auditor != null) {
+            throw new Exception("AuditorFactory already initialized.");
+        }
+
         Properties props = new Properties();
         try {
             props.load(new FileInputStream(confFilePath));
@@ -32,11 +36,23 @@ public class AuditorFactory {
             throw new Exception("AuditorFactory already initialized.");
         }
 
-        // create auditor instance
-        String auditorClass = props.getProperty(Conf.AUDITOR_IMPL_PROP);
-        Class<?> clazz = Class.forName(auditorClass);
-        Constructor<?> constructor = clazz.getConstructor(Properties.class);
-        auditor = (Auditor) constructor.newInstance(props);
+        // discover the Auditor implementation class using the ServiceLoader
+        ServiceLoader<Auditor> serviceLoader = ServiceLoader.load(Auditor.class);
+        if (serviceLoader.iterator().hasNext()) {
+            auditor = serviceLoader.iterator().next();
+            log.debug("Using Auditor " + auditor.getClass().getName());
+            try {
+                auditor.init(props);
+            }
+            catch (Exception e) {
+                throw new Exception(String.format(
+                        "Failed to initialize the Auditor %s: %s", auditor.getClass().getName(), e.getMessage()));
+            }
+            log.info(String.format("Auditor %s has been initialized successfully.", auditor.getClass().getName()));
+        }
+        else {
+            throw new Exception("No Auditor found on the classpath.");
+        }
     }
 
     public static Auditor getAuditor() {
