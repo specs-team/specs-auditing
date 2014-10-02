@@ -10,7 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class AuditEventDAOImpl implements AuditEventDAO {
+public class JpaAuditEventDAO implements AuditEventDAO {
+
+    public JpaAuditEventDAO() throws Exception {
+        EMF.init();
+    }
+
+    public JpaAuditEventDAO(String persistenceUnitName) throws Exception {
+        EMF.init(persistenceUnitName);
+    }
+
     @Override
     public void save(AuditEvent auditEvent) {
         org.specs.auditing.dal.jpa.model.AuditEvent auditEventJpa =
