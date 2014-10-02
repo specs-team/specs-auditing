@@ -37,6 +37,17 @@
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>org.specs.auditing.dal</groupId>
+            <artifactId>audit-dal</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.specs.auditing.dal</groupId>
+            <artifactId>audit-dal-jpa</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.1</version>
@@ -52,6 +63,12 @@
             <groupId>org.specs.auditing</groupId>
             <artifactId>audit-client-amqp</artifactId>
             <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.10.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

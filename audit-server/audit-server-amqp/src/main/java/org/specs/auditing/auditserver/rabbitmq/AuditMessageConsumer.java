@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.specs.auditing.auditserver.rabbitmq.utils.Conf;
 import org.specs.auditing.common.auditevent.AuditEvent;
 import org.specs.auditing.common.utils.AuditEventDeserializer;
+import org.specs.auditing.dal.AuditEventDAO;
 
 public class AuditMessageConsumer implements Runnable {
     private static Logger log = Logger.getLogger(AuditMessageConsumer.class);
@@ -15,12 +16,19 @@ public class AuditMessageConsumer implements Runnable {
     private Thread thread;
     private AuditEventDeserializer auditEventDeserializer;
 
+    // injection?
+    private AuditEventDAO auditEventDAO;
+
     public AuditMessageConsumer() throws Exception {
         factory = new ConnectionFactory();
         factory.setHost(Conf.getAmqpServerHost());
         factory.setPort(Conf.getAmqpServerPort());
 
         auditEventDeserializer = new AuditEventDeserializer();
+    }
+
+    public void setAuditEventDAO(AuditEventDAO auditEventDAO) {
+        this.auditEventDAO = auditEventDAO;
     }
 
     public void start() {
@@ -32,7 +40,9 @@ public class AuditMessageConsumer implements Runnable {
 
     public void close() {
         log.trace("AuditMessageConsumer is stopping...");
-        thread.interrupt();
+        if (thread != null) {
+            thread.interrupt();
+        }
         log.info("AuditMessageConsumer has stopped.");
     }
 
@@ -88,7 +98,7 @@ public class AuditMessageConsumer implements Runnable {
                         log.trace(String.format("New message arrived with routing key '%s':\n%s", routingKey, message));
                     }
 
-                    AuditEvent auditMessage = auditEventDeserializer.deserialize(message);
+                    auditEvent = auditEventDeserializer.deserialize(message);
                 }
                 catch (Exception e) {
                     log.error(String.format("Invalid message received: %s\nRouting key: %s\nMessage: %s",
@@ -97,7 +107,7 @@ public class AuditMessageConsumer implements Runnable {
                 }
 
                 try {
-                    // TODO: store audit event
+                    auditEventDAO.save(auditEvent);
                     log.trace("Audit event was stored successfully.");
                 }
                 catch (Exception e) {

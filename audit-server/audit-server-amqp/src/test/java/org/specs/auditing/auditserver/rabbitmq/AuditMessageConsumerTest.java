@@ -7,11 +7,14 @@ import org.specs.auditing.client.AuditorFactory;
 import org.specs.auditing.common.auditevent.AuditEvent;
 import org.specs.auditing.common.auditevent.Severity;
 import org.specs.auditing.common.auditevent.Target;
+import org.specs.auditing.dal.AuditEventDAO;
+import org.specs.auditing.dal.jpa.JpaAuditEventDAO;
 
 import java.util.Date;
 
 public class AuditMessageConsumerTest {
     private static final String CONF_FILE = "src/test/resources/test.properties";
+    private static final String TEST_PU_NAME = "specs-auditing-test-pu";
     private static final int NUMBER_OF_AUDIT_RECORDS = 3;
 
     private static Logger log = Logger.getLogger(AuditMessageConsumerTest.class);
@@ -25,6 +28,8 @@ public class AuditMessageConsumerTest {
 
     public void test() throws Exception {
         AuditMessageConsumer auditMessageConsumer = new AuditMessageConsumer();
+        AuditEventDAO auditEventDAO = new JpaAuditEventDAO(TEST_PU_NAME);
+        auditMessageConsumer.setAuditEventDAO(auditEventDAO);
         auditMessageConsumer.start();
         Thread.sleep(500);
 
@@ -51,6 +56,7 @@ public class AuditMessageConsumerTest {
         auditEvent.setInitiator(initiator);
         Target target = new Target("specs-server1/federation-api");
         target.setType("WEB_SERVICE");
+        auditEvent.setTarget(target);
         auditEvent.setSeverity(Severity.INFO);
         auditEvent.setOutcome(org.specs.auditing.common.auditevent.Outcome.SUCCESS);
 
