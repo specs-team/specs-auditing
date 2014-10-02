@@ -1,7 +1,6 @@
 package org.specs.auditing.client;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.specs.auditing.common.auditevent.*;
 
@@ -12,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.*;
 import java.net.InetAddress;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -145,7 +147,7 @@ public class WebAppAuditingFilter implements Filter {
     }
 
     private AuditEvent createAuditEvent(HttpServletRequest httpRequest, HttpServletResponse httpResponse,
-                                        String requestContent, String responseContent) throws JSONException {
+                                        String requestContent, String responseContent) throws Exception {
         AuditEvent event = new AuditEvent();
         event.setEventType("API_CALL");
         event.setEventTime(new Date());
@@ -190,6 +192,8 @@ public class WebAppAuditingFilter implements Filter {
             if (certs != null) {
                 String clientDN = certs[0].getSubjectDN().getName();
                 initiator.setId(clientDN);
+                String certFingerprint = getFingerprint(certs[0]);
+                initiator.setCertFingerprint(certFingerprint);
             }
             else {
                 initiator.setId(httpRequest.getRemoteAddr());
@@ -238,6 +242,14 @@ public class WebAppAuditingFilter implements Filter {
         event.addAttachment(httpResponseAtt);
 
         return event;
+    }
+
+    static String getFingerprint(X509Certificate cert) throws NoSuchAlgorithmException, CertificateEncodingException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] der = cert.getEncoded();
+        md.update(der);
+        byte[] digest = md.digest();
+        return javax.xml.bind.DatatypeConverter.printHexBinary(digest);
     }
 
     public class HttpServletResponseCopier extends HttpServletResponseWrapper {

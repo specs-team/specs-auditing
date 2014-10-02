@@ -5,6 +5,7 @@ public class Initiator {
     private String id;
     private String type;
     private String oauthAccessToken;
+    private String certFingerprint;
 
     public Initiator() {
     }
@@ -35,5 +36,13 @@ public class Initiator {
 
     public void setOauthAccessToken(String oauthAccessToken) {
         this.oauthAccessToken = oauthAccessToken;
+    }
+
+    public String getCertFingerprint() {
+        return certFingerprint;
+    }
+
+    public void setCertFingerprint(String certFingerprint) {
+        this.certFingerprint = certFingerprint;
     }
 }
