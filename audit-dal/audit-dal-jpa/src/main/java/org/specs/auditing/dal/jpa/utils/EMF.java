@@ -7,7 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class EMF {
-    private static final String DEFAULT_PERSISTENCE_UNIT = "mainPU";
+    private static final String DEFAULT_PERSISTENCE_UNIT = "specs-auditing-pu";
     protected static Logger log = Logger.getLogger(EMF.class);
     private static EntityManagerFactory emf;
 
@@ -22,7 +22,7 @@ public class EMF {
         }
         catch (Exception e) {
             log.error("Failed to initialize JPA context: " + e.getMessage(), e);
-            throw new Exception("Failed to initialize JPA context.", e);
+            throw new Exception("Failed to initialize JPA context: " + e.getMessage(), e);
         }
     }
 
