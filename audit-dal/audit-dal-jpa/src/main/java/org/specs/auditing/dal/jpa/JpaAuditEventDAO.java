@@ -12,12 +12,7 @@ import java.util.Map;
 
 public class JpaAuditEventDAO implements AuditEventDAO {
 
-    public JpaAuditEventDAO() throws Exception {
-        EMF.init();
-    }
-
-    public JpaAuditEventDAO(String persistenceUnitName) throws Exception {
-        EMF.init(persistenceUnitName);
+    public JpaAuditEventDAO() {
     }
 
     @Override
