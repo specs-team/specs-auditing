@@ -4,11 +4,13 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.test.framework.JerseyTest;
 import com.sun.jersey.test.framework.WebAppDescriptor;
+import org.codehaus.jettison.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.specs.auditing.common.auditevent.AuditEvent;
+import org.specs.auditing.common.auditevent.JsonAttachment;
 import org.specs.auditing.common.auditevent.Severity;
 import org.specs.auditing.common.auditevent.Target;
 import org.specs.auditing.common.utils.AuditEventSerializer;
@@ -50,7 +52,7 @@ public class AuditEventsResourceTest extends JerseyTest {
         assertEquals(response.getStatus(), 204);
     }
 
-    private AuditEvent createAuditEvent() {
+    private AuditEvent createAuditEvent() throws JSONException {
         AuditEvent auditEvent = new AuditEvent();
         auditEvent.setAction("READ");
         auditEvent.setEventTime(new Date());
@@ -63,6 +65,17 @@ public class AuditEventsResourceTest extends JerseyTest {
         auditEvent.setTarget(target);
         auditEvent.setSeverity(Severity.INFO);
         auditEvent.setOutcome(org.specs.auditing.common.auditevent.Outcome.SUCCESS);
+
+        JsonAttachment attachment1 = new JsonAttachment("httpRequestData");
+        attachment1.put("method", "GET");
+        attachment1.put("uri", "https://specs-server1/federation-api/users/523aebaa-cf04-4bd4-b067-dcf17e74ff50");
+        auditEvent.addAttachment(attachment1);
+
+        JsonAttachment attachment2 = new JsonAttachment("httpResponseData");
+        attachment2.put("statusCode", 200);
+        attachment2.put("contentType", "application/json");
+        attachment2.put("content", "{'userId':'523aebaa-cf04-4bd4-b067-dcf17e74ff50', 'username':'test_user'}");
+        auditEvent.addAttachment(attachment2);
 
         return auditEvent;
     }
