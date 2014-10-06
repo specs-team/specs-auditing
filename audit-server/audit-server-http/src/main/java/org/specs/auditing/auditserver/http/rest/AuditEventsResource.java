@@ -26,7 +26,7 @@ public class AuditEventsResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createToken(String data) throws Exception {
+    public Response storeAuditEvent(String data) throws Exception {
         AuditEvent auditEvent;
         try {
             auditEvent = auditEventDeserializer.deserialize(data);
@@ -39,7 +39,9 @@ public class AuditEventsResource {
 
         try {
             auditEventDAO.save(auditEvent);
-            log.trace("Audit event has been stored successfully.");
+            if (log.isTraceEnabled()) {
+                log.trace("Audit event has been stored successfully: " + data);
+            }
         }
         catch (Exception e) {
             log.error("Failed to store audit event: " + e.getMessage(), e);

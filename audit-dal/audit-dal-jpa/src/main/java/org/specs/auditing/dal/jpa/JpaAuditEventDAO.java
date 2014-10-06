@@ -37,6 +37,7 @@ public class JpaAuditEventDAO implements AuditEventDAO {
                 Attachment attachment = entry.getValue();
                 org.specs.auditing.dal.jpa.model.Attachment attachmentJpa =
                         new org.specs.auditing.dal.jpa.model.Attachment();
+                attachmentJpa.setAuditEvent(auditEventJpa);
                 attachmentJpa.setName(attachment.getName());
                 attachmentJpa.setContentType(attachment.getContentType());
                 // TODO: support for other attachment content types

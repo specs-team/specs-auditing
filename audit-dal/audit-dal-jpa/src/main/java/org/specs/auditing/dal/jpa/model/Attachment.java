@@ -19,7 +19,7 @@ public class Attachment implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "type", nullable = false, length = 45)
+    @Column(name = "name", nullable = false, length = 45)
     private String name;
     @Basic(optional = false)
     @NotNull
