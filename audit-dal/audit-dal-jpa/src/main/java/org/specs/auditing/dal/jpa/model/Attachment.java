@@ -1,5 +1,7 @@
 package org.specs.auditing.dal.jpa.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -34,6 +36,7 @@ public class Attachment implements Serializable {
     private String content;
     @JoinColumn(name = "audit_event_id", referencedColumnName = "audit_event_id", nullable = false)
     @ManyToOne(optional = false)
+    @JsonIgnore
     private AuditEvent auditEvent;
 
     public Attachment() {
