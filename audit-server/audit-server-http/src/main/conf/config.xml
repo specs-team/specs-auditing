@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <indexing>
+        <enabled>true</enabled>
+        <indexDirectory>/var/specs/specs-auditing/lucene-index</indexDirectory>
+        <indexableAttachments>
+            <contentType>text/plain</contentType>
+            <contentType>application/json</contentType>
+        </indexableAttachments>
+    </indexing>
 </config>

@@ -1,7 +1,7 @@
 package org.specs.auditing.auditserver.http.utils;
 
 import org.apache.log4j.Logger;
-import org.specs.auditing.dal.jpa.utils.EMF;
+import org.specs.auditing.model.utils.EMF;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
