@@ -1,11 +1,11 @@
 package org.specs.auditing.queryapi.utils;
 
 import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Conf {
-    private static Conf instance = new Conf();
-    private static Logger log = Logger.getLogger(Conf.class);
+    private static Logger log = LogManager.getLogger(Conf.class);
     private static XMLConfiguration config;
 
     private Conf() {
@@ -20,5 +20,17 @@ public class Conf {
             throw new Exception(String.format("Failed to read configuration file '%s': %s", configFile,
                     e.getMessage()));
         }
+    }
+
+    public static boolean isLuceneIndexSearchEnabled() {
+        return config.getBoolean("luceneIndexSearch.enabled");
+    }
+
+    public static String getLuceneIndexDir() {
+        return config.getString("luceneIndexSearch.indexDirectory");
+    }
+
+    public static int getLuceneMaxHits() {
+        return config.getInt("luceneIndexSearch.maxHits");
     }
 }

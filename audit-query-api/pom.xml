@@ -19,8 +19,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
@@ -28,24 +32,24 @@
             <version>1.9.13</version>
         </dependency>
         <dependency>
-            <groupId>org.specs.auditing</groupId>
-            <artifactId>audit-common</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.specs.auditing.dal</groupId>
             <artifactId>audit-dal</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.specs.auditing.dal</groupId>
-            <artifactId>audit-dal-jpa</artifactId>
+            <groupId>org.specs.auditing</groupId>
+            <artifactId>audit-model</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
             <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
@@ -68,7 +72,16 @@
             <version>3.0-alpha-1</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-analyzers-common</artifactId>
+            <version>4.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.lucene</groupId>
+            <artifactId>lucene-queryparser</artifactId>
+            <version>4.10.1</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -1,14 +1,15 @@
 package org.specs.auditing.queryapi.utils;
 
-import org.apache.log4j.Logger;
-import org.specs.auditing.dal.jpa.utils.EMF;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.specs.auditing.model.utils.EMF;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 public class WebAppInitializer implements ServletContextListener {
-    protected static Logger log = Logger.getLogger(WebAppInitializer.class);
+    private static Logger log = LogManager.getLogger(WebAppInitializer.class);
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
