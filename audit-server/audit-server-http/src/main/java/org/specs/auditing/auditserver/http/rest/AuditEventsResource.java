@@ -1,7 +1,8 @@
 package org.specs.auditing.auditserver.http.rest;
 
 import com.sun.jersey.spi.resource.Singleton;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.specs.auditing.auditserver.http.utils.AuditEventsIndexer;
 import org.specs.auditing.auditserver.http.utils.Conf;
 import org.specs.auditing.model.entities.AuditEvent;
@@ -19,7 +20,7 @@ import java.io.IOException;
 @Path("/audit-events")
 @Singleton
 public class AuditEventsResource {
-    protected static Logger log = Logger.getLogger(AuditEventsResource.class);
+    private static Logger log = LogManager.getLogger(AuditEventsResource.class);
     private AuditEventsIndexer auditEventsIndexer;
 
     public AuditEventsResource() throws Exception {
@@ -49,7 +50,7 @@ public class AuditEventsResource {
             em.getTransaction().commit();
 
             if (log.isTraceEnabled()) {
-                log.trace("Audit event has been stored successfully: " + data);
+                log.trace("Audit event {} has been stored successfully: {}", auditEvent.getAuditEventId() , data);
             }
         }
         catch (Exception e) {

@@ -1,6 +1,7 @@
 package org.specs.auditing.auditserver.http.utils;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
@@ -15,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class AuditEventsIndexer {
-    private static Logger log = Logger.getLogger(AuditEventsIndexer.class);
+    private static Logger log = LogManager.getLogger(AuditEventsIndexer.class);
     private IndexWriter writer;
 
     public AuditEventsIndexer() throws IOException {
@@ -49,7 +50,7 @@ public class AuditEventsIndexer {
 
         writer.addDocument(document);
         writer.commit();
-        log.trace("Audit event has been indexed successfully.");
+        log.trace("Audit event {} has been indexed successfully.", auditEvent.getAuditEventId());
     }
 
     public void close() {
