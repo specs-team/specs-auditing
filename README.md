@@ -1,4 +1,4 @@
 specs-auditing
 ==============
 
-SPECS auditing framework
+Documentation: https://github.com/specs-team/specs-auditing/wiki
